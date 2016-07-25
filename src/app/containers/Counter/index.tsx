@@ -22,7 +22,7 @@ interface IProps {
 class Counter extends React.Component<IProps, void> {
 
   public render() {
-    const { increment, decrement, counter } = this.props;
+    const { increment, decrement, divide, counter } = this.props;
 
     return (
       <div className={s.counter}>
@@ -37,6 +37,11 @@ class Counter extends React.Component<IProps, void> {
           onClick={decrement}
           disabled={counter.count <= 0}>
             DECREMENT
+        </button>
+        <button
+          name="divBtn"
+          onClick={divide}>
+            DIVIDE
         </button>
         <p>{counter.count}</p>
       </div>

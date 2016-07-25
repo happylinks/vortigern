@@ -1,3 +1,4 @@
+var webpack = require('webpack');
 var path = require('path');
 
 module.exports = {
@@ -29,7 +30,7 @@ module.exports = {
       {
         test: /\.ts(x?)$/,
         exclude: /node_modules/,
-        loader: 'babel-loader?presets[]=es2015&presets[]=react!ts-loader'
+        loader: 'react-hot!babel-loader?presets[]=es2015&presets[]=react!ts-loader'
       },
       {
         test: /\.js$/,
@@ -62,6 +63,8 @@ module.exports = {
       },
     ]
   },
+  plugins: [
+  ],
   devServer: {
     historyApiFallback: true,
   },
