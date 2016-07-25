@@ -25,18 +25,45 @@ module.exports = {
     ]
   },
   module: {
-    loaders: [{
-      test: /\.ts(x?)$/,
-      exclude: /node_modules/,
-      loader: 'babel-loader?presets[]=es2015&presets[]=react!ts-loader'
-    }, {
-      test: /\.js$/,
-      exclude: /node_modules/,
-      loader: 'babel',
-      query: {
-        presets: ['es2015', 'react']
-      }
-    }]
+    loaders: [
+      {
+        test: /\.ts(x?)$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader?presets[]=es2015&presets[]=react!ts-loader'
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'babel',
+        query: {
+          presets: ['es2015', 'react']
+        }
+      },
+      {
+        test: /\.css$/,
+        include: path.resolve('./src/app'),
+        loaders: [
+          'style-loader',
+          'css-loader?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]',
+          'postcss-loader'
+        ]
+      },
+      {
+        test: /\.css$/,
+        exclude: path.resolve('./src/app'),
+        loaders: [
+          'style-loader',
+          'css-loader'
+        ]
+      },
+      {
+        test: /\.(jpe?g|png|gif)$/i,
+        loader: 'url?limit=1000&name=images/[hash].[ext]'
+      },
+    ]
+  },
+  devServer: {
+    historyApiFallback: true,
   },
   devtool: 'eval'
 }

@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "sourceMap": true
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "jsx": "preserve",
+    "experimentalDecorators": true
   },
   "exclude": [
     "node_modules"
