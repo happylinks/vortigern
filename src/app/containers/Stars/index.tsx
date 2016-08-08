@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { starsRequest } from '../../redux/modules/stars/stars';
-import { IStars } from '../../redux/modules/stars/stars.model';
+import { githubStarsRequest } from '../../actions/github/stars';
 const { connect } = require('react-redux');
 const { asyncConnect } = require('redux-connect');
 
 interface IProps {
-  stars: IStars;
-  starsRequest: Redux.ActionCreator;
+  stars: any;
+  githubStarsRequest: Redux.ActionCreator;
 }
 
 interface IState {
@@ -15,14 +14,16 @@ interface IState {
 
 @asyncConnect([{
   promise: ({ store: { dispatch } }) => {
-    dispatch(starsRequest());
-  }
+    dispatch(githubStarsRequest({
+      repo: 'barbar/vortigern', // get from initial state?
+    }));
+  },
 }])
 @connect(
   state => ({
-    stars: state.stars,
+    stars: state.githubStars,
   }),
-  { starsRequest }
+  { githubStarsRequest }
 )
 class Stars extends React.Component<IProps, IState> {
   constructor(props: any) {
@@ -37,9 +38,9 @@ class Stars extends React.Component<IProps, IState> {
   }
 
   private onClickButton() {
-    const { starsRequest } = this.props;
+    const { githubStarsRequest } = this.props;
     const { repo } = this.state;
-    starsRequest({ repo });
+    githubStarsRequest({ repo });
   }
 
   private onChangeRepo(e) {

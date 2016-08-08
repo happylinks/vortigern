@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { increment, decrement, divide } from '../../redux/modules/counter/counter';
-import { ICounter } from '../../redux/modules/counter/counter.model';
+import { increment, decrement, divide } from '../../actions/counter';
 const { connect } = require('react-redux');
 const s = require('./style.css');
 
 interface IProps {
-  counter: ICounter;
+  counter: any;
   increment: Redux.ActionCreator;
   decrement: Redux.ActionCreator;
   divide: Redux.ActionCreator;

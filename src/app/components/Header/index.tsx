@@ -12,6 +12,8 @@ class Header extends React.Component<any, any> {
           <li><Link to="about">About</Link></li>
           <li><Link to="counter">Counter</Link></li>
           <li><Link to="stars">Stars</Link></li>
+          <li><Link to="gists">Gists</Link></li>
+          <li><Link to="forms">Forms</Link></li>
         </ul>
       </nav>
     );
