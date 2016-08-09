@@ -1,6 +1,11 @@
 import * as React from 'react';
+import { GistComponent } from '../Gist';
 
-class GistListComponent extends React.Component<{}, {}> {
+interface IProps {
+  gists?: any;
+}
+
+class GistListComponent extends React.Component<IProps, {}> {
   constructor(props) {
     super(props);
 
@@ -10,7 +15,15 @@ class GistListComponent extends React.Component<{}, {}> {
   }
 
   public render() {
-    return null;
+    return (
+      <ul>
+      {
+        this.props.gists.map((gist) => {
+          return <GistComponent key={gist.id} description={gist.description} owner={gist.owner.login} link={gist.html_url} />;
+        })
+      }
+      </ul>
+    );
   }
 }
 

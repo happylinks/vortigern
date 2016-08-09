@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { githubGistsRequest } from '../../actions/github/gists';
+import { GistListComponent } from '../../components/Gists/GistList';
 const { connect } = require('react-redux');
 const { asyncConnect } = require('redux-connect');
 
@@ -53,7 +54,7 @@ class Gists extends React.Component<IProps, IState> {
     const { gists } = this.props;
     const { username } = this.state;
 
-    console.log(gists);
+    console.log('gists', gists);
 
     return(
       <div>
@@ -61,7 +62,7 @@ class Gists extends React.Component<IProps, IState> {
         <button onClick={this.onClickButton}>Fetch</button><br/>
         { gists.error ? `ERROR: ${gists.message.message}` : '' }
         <br/>
-        { gists.isFetching ? 'Fetching Stars' : '' }
+        { gists.isFetching && gists !== 'undefined' && !gists.error ? 'Fetching Gists' : <GistListComponent gists={gists.gists}/> }
       </div>
     );
   }
