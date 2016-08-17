@@ -1,0 +1,53 @@
+:local(.header) {
+  .masthead {
+    min-height: 300px;
+    padding: 1em 0em;
+
+    .logo.item img {
+      margin-right: 1em;
+    }
+    .ui.menu .ui.button {
+      margin-left: 0.5em;
+    }
+    h1.ui.header {
+      margin-top: 1em;
+      margin-bottom: 0em;
+      font-size: 4em;
+      font-weight: normal;
+    }
+    h2 {
+      font-size: 1.7em;
+      font-weight: normal;
+    }
+  }
+  .secondary.pointing.menu .toc.item {
+    display: none;
+  }
+
+  @media only screen and (max-width: 700px) {
+    .ui.fixed.menu {
+      display: none !important;
+    }
+    .secondary.pointing.menu {
+      .item, .menu {
+        display: none;
+      }
+      .toc.item {
+        display: block;
+      }
+    }
+    .masthead {
+      &.segment {
+        min-height: 350px;
+      }
+      h1.ui.header {
+        font-size: 2em;
+        margin-top: 1.5em;
+      }
+      h2 {
+        margin-top: 0.5em;
+        font-size: 1.5em;
+      }
+    }
+  }
+}

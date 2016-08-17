@@ -8,11 +8,13 @@ class App extends React.Component<any, any> {
     const s = require('./style.css');
 
     return (
-      <section className={s.appContainer}>
+      <div>
         <Helmet {...appConfig.app} {...appConfig.app.head} />
         <Header />
-        {this.props.children}
-      </section>
+        <section className={classnames(['ui center aligned container', s.appContainer])}>
+          {this.props.children}
+        </section>
+      </div>
     );
   }
 }

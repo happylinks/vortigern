@@ -27,17 +27,20 @@ class Counter extends React.Component<IProps, void> {
       <div className={s.counter}>
         <h4>Counter Example</h4>
         <button
+          className="ui button"
           name="incBtn"
           onClick={increment}>
             INCREMENT
         </button>
         <button
+          className="ui button"
           name="decBtn"
           onClick={decrement}
           disabled={counter.count <= 0}>
             DECREMENT
         </button>
         <button
+          className="ui button"
           name="divBtn"
           onClick={divide}>
             DIVIDE
