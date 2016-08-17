@@ -6,7 +6,11 @@
 interface Window {
   devToolsExtension?: () => any;
   __INITIAL_STATE__?: any;
+  __commit?: string;
+  t: any;
 }
+
+declare var t: any;
 
 interface ObjectConstructor {
   assign(target: any, ...sources: any[]): any;

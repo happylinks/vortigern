@@ -11,7 +11,13 @@ var config = {
 
   resolve: {
     root: path.resolve(__dirname),
-    extensions: ['', '.ts', '.tsx', '.js', '.jsx']
+    extensions: [
+      '',
+      '.ts',
+      '.tsx',
+      '.js',
+      '.jsx'
+    ]
   },
 
   entry: {
@@ -29,7 +35,7 @@ var config = {
       'react-router-redux',
       'redux',
       'redux-connect',
-      'redux-thunk'
+      'redux-saga',
     ]
   },
 
@@ -49,30 +55,40 @@ var config = {
     loaders: [
       {
         test: /\.tsx?$/,
+        exclude: /node_modules/,
         loader: 'babel-loader?presets[]=es2015&presets[]=react!ts-loader'
       },
       {
         test: /\.jsx$/,
-        loader: 'babel?presets[]=es2015'
+        exclude: /node_modules/,
+        loader: 'babel',
+        query: {
+          presets: ['es2015', 'react']
+        }
       },
       {
         test: /\.json$/,
         loader: 'json-loader'
       },
       {
-        test: /\.css$/,
+        test: /\.less$/,
         include: path.resolve('./src/app'),
-        loader: ExtractTextPlugin.extract({
-          notExtractLoader: 'style-loader',
-          loader: 'css-loader?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]'
-        })
+        loaders: [
+          'style-loader',
+          'css-loader',
+          'less-loader',
+          // 'postcss-loader',
+        ]
       },
       {
         test: /\.css$/,
-        exclude: path.resolve('./src/app'),
+        include: [
+          path.resolve('./src/app'),
+          path.resolve('./semantic'),
+        ],
         loader: ExtractTextPlugin.extract({
           notExtractLoader: 'style-loader',
-          loader: 'css-loader'
+          loader: 'css-loader?importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]'
         })
       },
       {

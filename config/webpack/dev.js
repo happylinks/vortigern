@@ -23,6 +23,7 @@ module.exports = {
 
   entry: {
     app: [
+      'webpack-hot-middleware/client',
       'babel-polyfill',
       './src/client.tsx',
       './src/vendor/main.ts'
@@ -37,6 +38,12 @@ module.exports = {
   },
 
   module: {
+    preLoaders: [
+      {
+        test: /\.tsx?$/,
+        loader: 'tslint'
+      }
+    ],
     loaders: [
       {
         test: /\.ts(x?)$/,
@@ -56,20 +63,24 @@ module.exports = {
         loader: 'json-loader'
       },
       {
-        test: /\.css$/,
+        test: /\.less$/,
         include: path.resolve('./src/app'),
         loaders: [
           'style-loader',
-          'css-loader?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]',
-          'postcss-loader'
+          'css-loader',
+          'less-loader',
+          // 'postcss-loader',
         ]
       },
       {
         test: /\.css$/,
-        exclude: path.resolve('./src/app'),
+        include: [
+          path.resolve('./src/app'),
+          path.resolve('./semantic')
+        ],
         loaders: [
           'style-loader',
-          'css-loader'
+          'css-loader?importLoaders=2&sourceMap&localIdentName=css_[local]___[hash:base64:5]',
         ]
       },
       {
@@ -116,11 +127,7 @@ module.exports = {
         NODE_ENV: JSON.stringify('development')
       }
     }),
-    new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
   ],
-
-  devServer: {
-    historyApiFallback: true,
-  },
 }

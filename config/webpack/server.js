@@ -53,7 +53,15 @@ var config = {
         test: /\.css$/,
         loaders: [
           'isomorphic-style-loader',
-          'css-loader?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]'
+          'css-loader?importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]'
+        ]
+      },
+      {
+        test: /\.less$/,
+        loaders: [
+          'isomorphic-style-loader',
+          'css-loader',
+          'less-loader'
         ]
       }
     ]

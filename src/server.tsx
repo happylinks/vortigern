@@ -84,7 +84,6 @@ app.get('*', (req, res) => {
           const html = ReactDOMServer.renderToString(
             <Html markup={markup} manifest={manifest} store={store} />
           );
-
           return `<!doctype html> ${html}`;
         }
       } else {
