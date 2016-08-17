@@ -11,6 +11,7 @@ import { githubGistsReducer } from './github/gists';
 import { githubStarsReducer } from './github/stars';
 import { starwarsFilmsReducer } from './starwars/films';
 import { counterReducer } from './counter';
+import { modalReducer } from './modal';
 
 // const initialUserState = {
 //   email: '',
@@ -24,6 +25,7 @@ const rootReducer: Redux.Reducer = combineReducers({
   githubStars: githubStarsReducer,
   starwarsFilms: starwarsFilmsReducer,
   counter: counterReducer,
+  modal: modalReducer,
   // stars: starsReducer,
   // counter: counterReducer,
   // auth: authReducer,
