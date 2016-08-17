@@ -58,11 +58,17 @@ class Gists extends React.Component<IProps, IState> {
 
     return(
       <div>
-        <input type="text" value={username} onChange={this.onChangeUsername}/><br/>
-        <button onClick={this.onClickButton}>Fetch</button><br/>
+        <div className="ui action input">
+          <input type="text" value={username} onChange={this.onChangeUsername}/>
+          <button className="ui button" onClick={this.onClickButton}>Fetch</button>
+        </div>
+        <br/>
         { gists.error ? `ERROR: ${gists.message.message}` : '' }
         <br/>
-        { gists.isFetching && gists !== 'undefined' && !gists.error ? 'Fetching Gists' : <GistListComponent gists={gists.gists}/> }
+        { gists.isFetching && gists !== 'undefined' && !gists.error ?
+          'Fetching Gists' :
+          <GistListComponent gists={gists.gists}/>
+        }
       </div>
     );
   }
