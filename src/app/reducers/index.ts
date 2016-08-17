@@ -9,6 +9,7 @@ const connectReducer = reduxConnect.reducer;
 
 import { githubGistsReducer } from './github/gists';
 import { githubStarsReducer } from './github/stars';
+import { starwarsFilmsReducer } from './starwars/films';
 import { counterReducer } from './counter';
 
 // const initialUserState = {
@@ -21,6 +22,7 @@ const rootReducer: Redux.Reducer = combineReducers({
   reduxAsyncConnect: connectReducer,
   githubGists: githubGistsReducer,
   githubStars: githubStarsReducer,
+  starwarsFilms: starwarsFilmsReducer,
   counter: counterReducer,
   // stars: starsReducer,
   // counter: counterReducer,

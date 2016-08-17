@@ -15,6 +15,7 @@ import { configureStore } from './app/store';
 import routes from './app/routes';
 
 import { Html } from './app/containers';
+const request = require('request');
 const manifest = require('../build/manifest.json');
 
 const express = require('express');
@@ -49,6 +50,11 @@ if (process.env.NODE_ENV !== 'production') {
 app.use(favicon(path.join(__dirname, '../src/favicon.ico')));
 
 app.use('/public', express.static(path.join(__dirname, '../build/public')));
+
+app.post('/api', (req, res) => {
+  const url = 'http://graphql-swapi.parseapp.com/';
+  req.pipe(request(url)).pipe(res);
+});
 
 app.get('*', (req, res) => {
   const location = req.url;
