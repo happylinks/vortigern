@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { increment, decrement, divide } from '../../actions/counter';
 const { connect } = require('react-redux');
+
+import { increment, decrement, divide } from '../../actions/counter';
+
 const s = require('./style.css');
 
 interface IProps {

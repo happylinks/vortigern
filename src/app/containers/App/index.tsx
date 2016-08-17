@@ -1,6 +1,8 @@
 const appConfig = require('../../../../config/main');
 import * as React from 'react';
 const Helmet = require('react-helmet');
+const classnames = require('classnames');
+
 import { Header } from '../../components';
 
 class App extends React.Component<any, any> {

@@ -55,11 +55,13 @@ class Stars extends React.Component<IProps, IState> {
 
     return(
       <div>
-        <input type="text" value={repo} onChange={this.onChangeRepo}/><br/>
-        <button onClick={this.onClickButton}>Fetch</button><br/>
+        <div className="ui action input">
+          <input type="text" value={repo} onChange={this.onChangeRepo}/>
+          <button className="ui button" onClick={this.onClickButton}>Fetch</button>
+        </div><br/>
         { stars.error ? `ERROR: ${stars.message.message}` : '' }
         <br/>
-        { stars.isFetching ? 'Fetching Stars' : `Stars: ${stars.count || ''}` }
+        <h3>{ stars.isFetching ? 'Fetching Stars' : `Stars: ${stars.count || ''}` }</h3>
       </div>
     );
   }
