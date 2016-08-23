@@ -3,6 +3,7 @@ node_modules
 .DS_Store
 build
 coverage
+semantic/src/definitions
 semantic/dist
 semantic/src/themes/amazon
 semantic/src/themes/bookish
@@ -12,6 +13,7 @@ semantic/src/themes/chubby
 semantic/src/themes/classic
 semantic/src/themes/colored
 semantic/src/themes/duo
+semantic/src/themes/default
 semantic/src/themes/fixed-width
 semantic/src/themes/flat
 semantic/src/themes/github
