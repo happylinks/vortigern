@@ -2,6 +2,7 @@ node_modules
 .vscode
 .DS_Store
 build
+coverage
 semantic/dist
 semantic/src/themes/amazon
 semantic/src/themes/bookish
