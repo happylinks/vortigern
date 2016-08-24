@@ -1,52 +1,30 @@
 import * as React from 'react';
-const { connect } = require('react-redux');
 const ReactModal = require('react-modal');
-
-import { hideModal } from '../../../actions/modal';
 
 interface IProps {
   title: string;
   message: string;
-  hideModal: Redux.ActionCreator;
+  hideModal: any;
 }
 
-@connect(
-  null,
-  { hideModal }
-)
-class Message extends React.Component<IProps, {}> {
-  constructor() {
-    super();
+const Message = (props: IProps) => {
+  const { title, message, hideModal } = props;
 
-    this.closeModal = this.closeModal.bind(this);
-  }
+  return (
+    <ReactModal
+      isOpen={true}
+      onRequestClose={hideModal}
+      className="ui modal active"
+      overlayClassName="ui dimmer modals transition visible active"
+    >
+      <i className="close icon" onClick={hideModal}></i>
+      <div className="header">{title}</div>
+      <div className="content">{message}</div>
+      <div className="actions">
+        <div className="ui button" onClick={hideModal}>Ok</div>
+      </div>
+    </ReactModal>
+  );
+};
 
-  private closeModal() {
-    this.props.hideModal();
-  }
-
-  public render() {
-    const { title, message } = this.props;
-
-    return (
-      <ReactModal
-        isOpen={true}
-        onRequestClose={this.closeModal}
-        className="ui modal active"
-        overlayClassName="ui dimmer modals transition visible active"
-      >
-        <i className="close icon" onClick={this.closeModal}></i>
-        <div className="header">
-          {title}
-        </div>
-        <div className="content">
-          {message}
-        </div>
-        <div className="actions">
-          <div className="ui button" onClick={this.closeModal}>Ok</div>
-        </div>
-      </ReactModal>
-    );
-  }
-}
-export { Message }
+export default Message;
