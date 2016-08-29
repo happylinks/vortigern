@@ -18,14 +18,15 @@ export function githubGistsReducer(state = initialState, action) {
     case GITHUB_GISTS_SUCCESS:
       return Object.assign({}, state, {
         isFetching: false,
-        gists: action.gists,
+        error: false,
+        gists: action.payload,
       });
 
     case GITHUB_GISTS_FAILURE:
       return Object.assign({}, state, {
         isFetching: false,
         error: true,
-        message: action.message,
+        message: action.payload,
       });
 
     default:

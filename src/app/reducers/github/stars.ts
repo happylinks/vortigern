@@ -19,14 +19,15 @@ export function githubStarsReducer(state = initialState, action) {
     case GITHUB_STARS_SUCCESS:
       return Object.assign({}, state, {
         isFetching: false,
-        count: action.count,
+        error: false,
+        count: action.payload.count,
       });
 
     case GITHUB_STARS_FAILURE:
       return Object.assign({}, state, {
         isFetching: false,
         error: true,
-        message: action.message,
+        message: action.payload,
       });
 
     default:

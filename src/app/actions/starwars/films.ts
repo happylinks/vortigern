@@ -11,13 +11,14 @@ export function starwarsFilmsRequest(options?: any) {
 export function starwarsFilmsSuccess(films: any) {
   return {
     type: STARWARS_FILMS_SUCCESS,
-    films,
+    payload: films,
   };
 }
 
 export function starwarsFilmsFailure(message: any) {
   return {
     type: STARWARS_FILMS_FAILURE,
-    message,
+    error: true,
+    payload: new Error(message),
   };
 }

@@ -19,14 +19,14 @@ export function starwarsFilmsReducer(state = initialState, action) {
       return Object.assign({}, state, {
         isFetching: false,
         error: false,
-        films: action.films,
+        films: action.payload,
       });
 
     case STARWARS_FILMS_FAILURE:
       return Object.assign({}, state, {
         isFetching: false,
         error: true,
-        message: action.message,
+        message: action.payload,
       });
 
     default:

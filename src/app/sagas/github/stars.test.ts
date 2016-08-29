@@ -14,7 +14,7 @@ describe('Sagas', () => {
       let githubUrl = 'https://api.github.com/repos/barbar/vortigern';
 
       beforeEach(() => {
-        generator = getGithubStars({ repo: 'barbar/vortigern' });
+        generator = getGithubStars({ payload: { repo: 'barbar/vortigern' } });
       });
 
       /** 200 */

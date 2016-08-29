@@ -5,20 +5,23 @@ export const GITHUB_GISTS_FAILURE: string = 'GITHUB_GISTS_FAILURE';
 export function githubGistsRequest(options: any) {
   return {
     type: GITHUB_GISTS_REQUEST,
-    username: options.username,
+    payload: {
+      username: options.username,
+    },
   };
 }
 
 export function githubGistsSuccess(gists) {
   return {
     type: GITHUB_GISTS_SUCCESS,
-    gists,
+    payload: gists,
   };
 }
 
 export function githubGistsFailure(message: any) {
   return {
     type: GITHUB_GISTS_FAILURE,
-    message,
+    error: true,
+    payload: new Error(message),
   };
 }

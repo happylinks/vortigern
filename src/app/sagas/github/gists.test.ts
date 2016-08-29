@@ -14,7 +14,7 @@ describe('Sagas', () => {
       let githubUrl = 'https://api.github.com/users/happylinks/gists';
 
       beforeEach(() => {
-        generator = getGithubGists({ username: 'happylinks' });
+        generator = getGithubGists({ payload: { username: 'happylinks' } });
       });
 
       /** 200 */

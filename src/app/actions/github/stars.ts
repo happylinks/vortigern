@@ -5,20 +5,25 @@ export const GITHUB_STARS_FAILURE: string = 'GITHUB_STARS_FAILURE';
 export function githubStarsRequest(options?: any) {
   return {
     type: GITHUB_STARS_REQUEST,
-    repo: options.repo,
+    payload: {
+      repo: options.repo,
+    },
   };
 }
 
 export function githubStarsSuccess(count: number) {
   return {
     type: GITHUB_STARS_SUCCESS,
-    count,
+    payload: {
+      count,
+    },
   };
 }
 
 export function githubStarsFailure(message: any) {
   return {
     type: GITHUB_STARS_FAILURE,
-    message,
+    error: true,
+    payload: new Error(message),
   };
 }
