@@ -1,12 +1,11 @@
 const appConfig = require('../../config/main');
 import { createStore, applyMiddleware, compose } from 'redux';
-import { routerMiddleware } from 'react-router-redux';
-import createSagaMiddleware from 'redux-saga';
+const { routerMiddleware } = require('react-router-redux');
+import createSagaMiddleware, { END } from 'redux-saga';
 import rootReducer from './reducers';
-import rootSaga from './sagas';
 const createLogger = require('redux-logger');
 
-export function configureStore(history, initialState?: any): Redux.Store {
+export function configureStore(history, initialState?: any) {
 
   const sagaMiddleware = createSagaMiddleware();
 
@@ -29,9 +28,10 @@ export function configureStore(history, initialState?: any): Redux.Store {
       ? window.devToolsExtension() : f => f
   )(createStore);
 
-  const store: Redux.Store = finalCreateStore(rootReducer, initialState);
+  const store: any = finalCreateStore(rootReducer, initialState);
 
-  sagaMiddleware.run(rootSaga);
+  store.runSaga = sagaMiddleware.run;
+  store.close = () => store.dispatch(END);
 
   if (appConfig.env === 'development' && (module as any).hot) {
     (module as any).hot.accept('./reducers', () => {

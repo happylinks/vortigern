@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Redux from 'redux';
 const { connect } = require('react-redux');
 
 import { hideModal } from '../../actions/modal';
@@ -10,7 +11,7 @@ const MODAL_COMPONENTS = {
 
 interface IProps {
   modal?: any;
-  hideModal?: Redux.ActionCreator;
+  hideModal?: Redux.ActionCreator<any>;
 }
 
 @connect(

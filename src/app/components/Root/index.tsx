@@ -1,6 +1,7 @@
 import * as React from 'react';
+import * as Redux from 'redux';
 import { Provider } from 'react-redux';
-import { I18nextProvider } from 'react-i18next';
+const { I18nextProvider } = require('react-i18next');
 const { Router, RouterContext } = require('react-router');
 const { ReduxAsyncConnect } = require('redux-connect');
 
@@ -8,7 +9,7 @@ import i18n from '../../i18n';
 import { ModalRoot } from '../../containers';
 
 interface IProps {
-  store: Redux.Store;
+  store: Redux.Store<any>;
   history: any;
   routes: any;
   type: string;

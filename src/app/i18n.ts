@@ -18,7 +18,6 @@ i18n
   keySeparator: false,
   resGetPath,
 
-  debug: true,
   interpolation: {
     escapeValue: false, // not needed for react.
   },

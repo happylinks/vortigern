@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { call, put } from 'redux-saga/effects';
-import { handleRequest } from '../../../app/helpers/TestHelper.tsx';
+import { handleRequest } from '../../../app/helpers/TestHelper';
 
 import { getGithubGists } from '../../../app/sagas/github/gists';
 import { githubGistsSuccess, githubGistsFailure } from '../../../app/actions/github/gists';
@@ -34,7 +34,7 @@ describe('Sagas', () => {
         expect(generator.next().value).to.deep.equal(call(handleRequest, githubUrl));
 
         // Check if result is wrong.
-        expect(generator.throw({}).value).to.deep.equal(put(githubGistsFailure({})));
+        expect(generator.throw({}).value).to.deep.equal(put(githubGistsFailure(null)));
 
         done();
       });

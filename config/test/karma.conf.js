@@ -2,10 +2,11 @@ var path = require('path');
 var webpack = require('webpack');
 var postcssAssets = require('postcss-assets');
 var postcssNext = require('postcss-cssnext');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var appConfig = require('../main');
 
 module.exports = function (config) {
-  const conf = {
+  var conf = {
     frameworks: ['mocha', 'chai', 'es6-shim'],
     browsers: ['PhantomJS'],
     files: [
@@ -62,18 +63,23 @@ module.exports = function (config) {
           },
           {
             test: /\.css$/,
-            include: path.resolve('./src/app'),
-            loaders: [
-              'style',
-              'css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]',
-              'postcss'
-            ]
+            include: [
+              path.resolve('./src/app'),
+              path.resolve('./semantic')
+            ],
+            loader: ExtractTextPlugin.extract({
+              fallbackLoader: 'style-loader',
+              loader: 'css-loader?importLoaders=2&sourceMap&localIdentName=css_[local]___[hash:base64:5]',
+            })
           },
           {
-            test: /\.css$/,
-            exclude: path.resolve('./src/app'),
-            loader: 'style!css'
-          }
+            test: /\.less$/,
+            include: path.resolve('./src/app'),
+            loader: ExtractTextPlugin.extract({
+              fallbackLoader: 'style-loader',
+              loader: 'css-loader!less-loader',
+            })
+          },
         ],
         postLoaders: [
           {
@@ -100,6 +106,7 @@ module.exports = function (config) {
         new webpack.IgnorePlugin(/^fs$/),
         new webpack.IgnorePlugin(/^react\/addons$/),
         new webpack.NoErrorsPlugin(),
+        new ExtractTextPlugin('styles.css'),
         new webpack.DefinePlugin({
           'process.env': {
             BROWSER: JSON.stringify(true),

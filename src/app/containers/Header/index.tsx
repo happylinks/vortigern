@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link } from 'react-router';
+const { Link } = require('react-router');
 const { connect } = require('react-redux');
 
 import { logoutRequest } from '../../actions/auth/logout';

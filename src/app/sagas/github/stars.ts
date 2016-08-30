@@ -9,7 +9,8 @@ export function* getGithubStars(action?: any): IterableIterator<any> {
     const res = yield call(handleRequest, `https://api.github.com/repos/${action.payload.repo}`);
     yield put(actions.githubStarsSuccess(res ? res.stargazers_count : 0));
   } catch (e) {
-    yield put(actions.githubStarsFailure(e));
+    console.error(e);
+    yield put(actions.githubStarsFailure(e.response ? e.response.message : null));
   }
 }
 

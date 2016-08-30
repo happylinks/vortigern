@@ -1,32 +1,56 @@
 const appConfig = require('../config/main');
 
-// import * as e6p from 'es6-promise';
-// (e6p as any).polyfill();
+const e6p = require('es6-promise');
+e6p.polyfill();
 import 'isomorphic-fetch';
 
+// Don't update to require.
 import * as React from 'react';
-import * as ReactDOMServer from 'react-dom/server';
-
-import { Provider } from 'react-redux';
-import { createMemoryHistory, match } from 'react-router';
-import { syncHistoryWithStore } from 'react-router-redux';
-const { ReduxAsyncConnect, loadOnServer } = require('redux-connect');
-import { configureStore } from './app/store';
 import routes from './app/routes';
+import rootSaga from './app/sagas';
 
-import { Html } from './app/containers';
-const request = require('request');
-const manifest = require('../build/manifest.json');
-
+const bodyParser = require('body-parser');
 const express = require('express');
 const path = require('path');
+const cors = require('cors');
 const compression = require('compression');
 const Chalk = require('chalk');
 const favicon = require('serve-favicon');
+const request = require('request');
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
+const { renderToString, renderToStaticMarkup } = require('react-dom/server');
+const { createMemoryHistory, match } = require('react-router');
+const { syncHistoryWithStore } = require('react-router-redux');
+const { loadOnServer } = require('redux-connect');
+
+const { configureStore } = require('./app/store');
+const { Html, Root } = require('./app/components');
+
+const manifest = require('../build/manifest.json');
+
+const testSession: any = {
+  id: 1,
+  first_name: 'Michiel',
+  last_name: 'Westerbeek',
+  username: 'michiel',
+};
+const validToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6Ik1pY2hpZWwiLCJsYXN0X25hbWUiOiJXZXN0ZXJiZWVrIiwidXNlcm5hbWUiOiJtaWNoaWVsIiwiaWF0IjoxNDcyMDM0MzgzfQ.3dFos6VxHN5mlBghzmvupu11sMoRDKZw7CztXlnHmKo';
+
+const corsOptions = {
+  origin: 'http://vortigern.local.com:8080',
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-access-token'],
+};
 
 const app = express();
-
+app.use(cookieParser());
 app.use(compression());
+app.use(cors(corsOptions));
+app.use(bodyParser.json());
+app.set('appSecret', 'Ghg1SG-O[y{8a;>hk32D{TuZK%na84');
+app.use(favicon(path.join(__dirname, '../src/favicon.ico')));
+app.use('/public', express.static(path.join(__dirname, '../build/public')));
 
 if (process.env.NODE_ENV !== 'production') {
   const webpack = require('webpack');
@@ -47,14 +71,79 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(require('webpack-hot-middleware')(webpackCompiler));
 }
 
-app.use(favicon(path.join(__dirname, '../src/favicon.ico')));
+/**
+ * API ROUTES
+ */
+const apiRoutes = express.Router();
+app.use('/api', apiRoutes);
 
-app.use('/public', express.static(path.join(__dirname, '../build/public')));
+apiRoutes.post('/login', (req, res) => {
+  const params = req.body;
+  if (params.jwt === validToken) {
+    res.status(200).send(
+      Object.assign({}, testSession, { token: validToken })
+    );
+  }
+  if (params.username === 'michiel' && params.password === 'test123test123') {
+    const token = jwt.sign(testSession, app.get('appSecret'));
+    res.status(200).send(
+      Object.assign({}, testSession, { token })
+    );
+  }
+  res.status(400).send({
+    message: 'Unsuccessful login',
+  });
+});
 
-app.post('/api', (req, res) => {
+apiRoutes.post('/logout', (req, res) => {
+  res.status(200).send({
+    message: 'Succesful logout',
+  });
+});
+
+// route middelware to verify a token
+apiRoutes.use((req, res, next) => {
+  // check header or url parameters or post parameters for token
+  const token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+  // decode token
+  if (token) {
+    // verifies secret and checks exp
+    jwt.verify(token, app.get('appSecret'), (err, decoded) => {
+      if (err) {
+        return res.json({ success: false, message: 'Failed to authenticate token.' });
+      } else {
+        // if everything is good, save to request for use in other routes
+        req.decoded = decoded;
+        next();
+      }
+    });
+  } else {
+    return res.status(403).send({
+      success: false,
+      message: 'No token provided.',
+    });
+  }
+});
+
+apiRoutes.post('/swapi', (req, res) => {
   const url = 'http://graphql-swapi.parseapp.com/';
   req.pipe(request(url)).pipe(res);
 });
+
+apiRoutes.post('/session', (req, res) => {
+  res.status(200).send(testSession);
+});
+
+/**
+ * SERVER SIDE RENDERING
+ */
+const renderHTML = (markup, store) => {
+  const html = renderToStaticMarkup(
+    <Html markup={markup} manifest={manifest} store={store} />
+  );
+  return `${html}`;
+};
 
 app.get('*', (req, res) => {
   const location = req.url;
@@ -69,23 +158,29 @@ app.get('*', (req, res) => {
       } else if (redirectLocation) {
         res.redirect(302, redirectLocation.pathname + redirectLocation.search);
       } else if (renderProps) {
+        const rootComp = (
+          <Root
+            store={store}
+            routes={routes}
+            history={createMemoryHistory()}
+            renderProps={renderProps}
+            type="server"
+          />
+        );
+
+        store.runSaga(rootSaga).done.then(() => {
+          const markup = renderToString(rootComp);
+          const html = renderHTML(markup, store);
+          res.status(200).send(html);
+        });
+
+        renderToString(rootComp);
+
         const asyncRenderData = Object.assign({}, renderProps, { store });
 
         loadOnServer(asyncRenderData).then(() => {
-          const markup = ReactDOMServer.renderToString(
-            <Provider store={store} key="provider">
-              <ReduxAsyncConnect {...renderProps} />
-            </Provider>
-          );
-          res.status(200).send(renderHTML(markup));
+          store.close();
         });
-
-        function renderHTML(markup) {
-          const html = ReactDOMServer.renderToString(
-            <Html markup={markup} manifest={manifest} store={store} />
-          );
-          return `<!doctype html> ${html}`;
-        }
       } else {
         res.status(404).send('Not Found?');
       }

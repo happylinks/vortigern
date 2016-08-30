@@ -1,10 +1,11 @@
 import * as React from 'react';
+import * as Redux from 'redux';
 const Helmet = require('react-helmet');
 
 interface IHtmlProps {
   manifest?: Object;
   markup?: string;
-  store?: Redux.Store;
+  store?: Redux.Store<any>;
 }
 
 const resolve = (files, props) => {

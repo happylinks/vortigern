@@ -1,7 +1,5 @@
 var path = require('path');
 var webpack = require('webpack');
-var postcssAssets = require('postcss-assets');
-var postcssNext = require('postcss-cssnext');
 var stylelint = require('stylelint');
 var ManifestPlugin = require('webpack-manifest-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -77,7 +75,6 @@ var config = {
           'style-loader',
           'css-loader',
           'less-loader',
-          // 'postcss-loader',
         ]
       },
       {
@@ -112,14 +109,6 @@ var config = {
         loader: 'url?limit=1000&name=images/[hash].[ext]'
       }
     ]
-  },
-
-  postcss: function () {
-    return [
-      stylelint({ files: '../../src/app/*.css' }),
-      postcssNext(),
-      postcssAssets({ relative: true })
-    ];
   },
 
   tslint: {

@@ -1,5 +1,6 @@
 var path = require('path');
 var fs = require('fs');
+var webpack = require('webpack');
 
 var nodeModules = {};
 fs.readdirSync('node_modules')
@@ -12,7 +13,10 @@ fs.readdirSync('node_modules')
 
 var config = {
   externals: nodeModules,
+
   target: 'node',
+
+  devtool: 'sourcemap',
 
   resolve: {
     extensions: ['', '.ts', '.tsx', '.js', '.jsx']
@@ -67,7 +71,13 @@ var config = {
     ]
   },
 
-  plugins: [],
+  plugins: [
+    new webpack.BannerPlugin({
+      banner: 'require("source-map-support").install();',
+      raw: true,
+      entryOnly: false,
+    }),
+  ],
 
   node: {
     console: false,

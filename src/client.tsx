@@ -3,37 +3,34 @@ import './style';
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-const { Router, browserHistory } = require('react-router');
-import { syncHistoryWithStore } from 'react-router-redux';
-const { ReduxAsyncConnect } = require('redux-connect');
-import { I18nextProvider } from 'react-i18next';
-import i18n from './i18n';
+const { browserHistory } = require('react-router');
+const { syncHistoryWithStore } = require('react-router-redux');
+
 import { configureStore } from './app/store';
 import routes from './app/routes';
-import { ModalRoot } from './app/components/ModalRoot';
+import rootSaga from './app/sagas';
+import { Root } from './app/components';
+// import { loginRequest } from './app/actions/auth/login';
 
-const store: Redux.Store = configureStore(
+const store: any = configureStore(
   browserHistory,
   window.__INITIAL_STATE__
 );
 const history = syncHistoryWithStore(browserHistory, store);
 
+store.runSaga(rootSaga);
+
+// const jwt = localStorage.getItem('token');
+// if (jwt) {
+//   store.dispatch(loginRequest({ jwt }));
+// }
+
 ReactDOM.render(
-  <I18nextProvider i18n={ i18n }>
-    <Provider store={store} key="provider">
-      <Router
-        history={history}
-        render={(props) =>
-          <div>
-            <ModalRoot />
-            <ReduxAsyncConnect {...props} />
-          </div>
-        }
-      >
-      {routes}
-      </Router>
-    </Provider>
-  </I18nextProvider>,
+  <Root
+    store={store}
+    routes={routes}
+    history={history}
+    type="client"
+  />,
   document.getElementById('app')
 );

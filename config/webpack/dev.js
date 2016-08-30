@@ -4,6 +4,7 @@ var postcssAssets = require('postcss-assets');
 var postcssNext = require('postcss-cssnext');
 var stylelint = require('stylelint');
 var ManifestPlugin = require('webpack-manifest-plugin');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
   devtool: 'source-map',
@@ -65,12 +66,10 @@ module.exports = {
       {
         test: /\.less$/,
         include: path.resolve('./src/app'),
-        loaders: [
-          'style-loader',
-          'css-loader',
-          'less-loader',
-          // 'postcss-loader',
-        ]
+        loader: ExtractTextPlugin.extract({
+          fallbackLoader: 'style-loader',
+          loader: 'css-loader!less-loader',
+        })
       },
       {
         test: /\.css$/,
@@ -78,10 +77,10 @@ module.exports = {
           path.resolve('./src/app'),
           path.resolve('./semantic')
         ],
-        loaders: [
-          'style-loader',
-          'css-loader?importLoaders=2&sourceMap&localIdentName=css_[local]___[hash:base64:5]',
-        ]
+        loader: ExtractTextPlugin.extract({
+          fallbackLoader: 'style-loader',
+          loader: 'css-loader?importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]',
+        })
       },
       {
         test: /\.eot(\?.*)?$/,
@@ -117,10 +116,22 @@ module.exports = {
     failOnHint: true
   },
 
+  stats: {
+    children: false,
+    assets: false,
+    colors: true,
+    version: false,
+    hash: false,
+    timings: false,
+    chunks: false,
+    chunkModules: false,
+  },
+
   plugins: [
      new ManifestPlugin({
       fileName: '../manifest.json'
     }),
+    new ExtractTextPlugin('styles.css'),
     new webpack.DefinePlugin({
       'process.env': {
         BROWSER: JSON.stringify(true),

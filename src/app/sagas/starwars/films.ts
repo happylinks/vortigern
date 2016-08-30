@@ -4,7 +4,7 @@ import { call, put } from 'redux-saga/effects';
 import { handleGraphQLRequest } from '../../helpers/handleGraphQLRequest';
 import * as actions from '../../actions/starwars/films';
 
-export function* getStarwarsFilms(options?: any): IterableIterator<any> {
+export function* getStarwarsFilms(): IterableIterator<any> {
   try {
     const res = yield call(handleGraphQLRequest, `{
       allFilms {
@@ -18,7 +18,6 @@ export function* getStarwarsFilms(options?: any): IterableIterator<any> {
     }`);
     yield put(actions.starwarsFilmsSuccess(res.allFilms.films || []));
   } catch (e) {
-    console.error(e);
     yield put(actions.starwarsFilmsFailure(e));
   }
 }
